@@ -18,8 +18,6 @@ img.thumbnail(maxsize, Image.ANTIALIAS) # downscale image
 img.resize((1920, 700))
 img.show()
 
-img_out = Image.new('RGB', (1920, 1080), color = (0, 0, 0))
-
 img_array = numpy.asarray(img)
 
 ascii_art = ""
@@ -32,6 +30,8 @@ for row in img_array:
     ascii_art += "\n" 
 
 print("Saving result...")
+
+img_out = Image.new('RGB', (6 * len(ascii_art.split("\n")[0]), 14 * len(ascii_art.split("\n"))), color = (0, 0, 0))
 
 d = ImageDraw.Draw(img_out)
 d.text((0, 0), ascii_art, fill = (255, 255, 255))
