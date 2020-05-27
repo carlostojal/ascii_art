@@ -4,18 +4,18 @@ import numpy
 import PIL
 from PIL import Image, ImageDraw
 
-# chars from the lightest to the darkest
+# chars from the darkest to the lightest
 chars = ["\"", "`", "^", "\\", ":", ";", "I", "l", "!", "i", "~", "+", "_", "-", "?", "]", "[", "}", "{", "1", ")", "(", "|", "/", "t", "f", "j", "r", "x", "n", "u", "v", "c", "z", "X", "Y", "U", "J", "C", "L", "Q", "0", "O", "Z", "m", "w", "q", "p", "d", "b", "k", "h", "a", "o", "*", "#", "M", "W", "&", "8", "%", "B", "@", "$"]
 
-maxsize = (150, 150)
+maxsize = (150, 150) # downscale to use
 
-img_path = sys.argv[1]
+
+img_path = sys.argv[1] # image path from argument
 
 print("Starting...")
 
 img = Image.open(img_path).convert('LA') # open image and convert to black and white
 img.thumbnail(maxsize, Image.ANTIALIAS) # downscale image
-img.resize((1920, 700))
 img.show()
 
 img_array = numpy.asarray(img)
