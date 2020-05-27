@@ -9,37 +9,53 @@ chars = ["\"", "`", "^", "\\", ":", ";", "I", "l", "!", "i", "~", "+", "_", "-",
 
 maxsize = (150, 150) # downscale to use
 
-
-img_path = sys.argv[1] # image path from argument
+success = True
 
 print("Starting...")
 
-img = Image.open(img_path).convert('LA') # open image and convert to black and white
-img.thumbnail(maxsize, Image.ANTIALIAS) # downscale image
-img.show()
+try:
+    img_path = sys.argv[1] # image path from argument
+except IndexError:
+    print("Image not given.\n")
+    print("Usage: \"python main.py path/to/img\"")
+    success = False
 
-img_array = numpy.asarray(img)
+if success:
+    try:
+        img = Image.open(img_path).convert('LA') # open image and convert to black and white
+    except PIL.UnidentifiedImageError:
+        print("Error reading image. Probably given file is not an image.")
+        success = False
+    except FileNotFoundError:
+        print("Image not found.")
+        success = False
+    
+    if success:
+        img.thumbnail(maxsize, Image.ANTIALIAS) # downscale image
+        img.show()
 
-ascii_art = ""
+        img_array = numpy.asarray(img)
 
-print("Converting to ASCII art...")
-for row in img_array:
-    for pixel in row:
-        correspondent_char = chars[int(pixel[0] / (255 / len(chars))) - 1]
-        ascii_art += correspondent_char + " "
-    ascii_art += "\n" 
+        ascii_art = ""
 
-print("Saving result...")
+        print("Converting to ASCII art...")
+        for row in img_array:
+            for pixel in row:
+                correspondent_char = chars[int(pixel[0] / (255 / len(chars))) - 1]
+                ascii_art += correspondent_char + " "
+            ascii_art += "\n" 
 
-img_out = Image.new('RGB', (6 * len(ascii_art.split("\n")[0]), 14 * len(ascii_art.split("\n"))), color = (0, 0, 0))
+        print("Saving result...")
 
-d = ImageDraw.Draw(img_out)
-d.text((0, 0), ascii_art, fill = (255, 255, 255))
-img_out.save("../data/out.png")
-img_out.show()
+        img_out = Image.new('RGB', (6 * len(ascii_art.split("\n")[0]), 14 * len(ascii_art.split("\n"))), color = (0, 0, 0))
 
-f = open("../data/out.txt", "w")
-f.write(ascii_art)
-f.close()
+        d = ImageDraw.Draw(img_out)
+        d.text((0, 0), ascii_art, fill = (255, 255, 255))
+        img_out.save("../data/out.png")
+        img_out.show()
 
-print("Done")
+        f = open("../data/out.txt", "w")
+        f.write(ascii_art)
+        f.close()
+
+        print("Done")
