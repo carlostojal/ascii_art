@@ -39,6 +39,7 @@ if success:
         ascii_art = ""
 
         print("Converting to ASCII art...")
+        # go through each pixel to find the char correspondent to the gray scale
         for row in img_array:
             for pixel in row:
                 correspondent_char = chars[int(pixel[0] / (255 / len(chars))) - 1]
@@ -46,14 +47,17 @@ if success:
             ascii_art += "\n" 
 
         print("Saving result...")
-
+        
+        # create image with the needed resolution
         img_out = Image.new('RGB', (6 * len(ascii_art.split("\n")[0]), 14 * len(ascii_art.split("\n"))), color = (0, 0, 0))
-
+        
+        # draw text in image and save file
         d = ImageDraw.Draw(img_out)
         d.text((0, 0), ascii_art, fill = (255, 255, 255))
         img_out.save("../data/out.png")
         img_out.show()
 
+        # write text to txt file
         f = open("../data/out.txt", "w")
         f.write(ascii_art)
         f.close()
